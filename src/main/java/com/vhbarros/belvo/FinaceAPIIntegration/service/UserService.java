@@ -67,8 +67,8 @@ public class UserService {
 
     public ApiClient apiClient() {
         ApiClient apiClient = new ApiClient();
-        apiClient.setUsername("8d0a440c-6ab7-401d-bce1-bef930e1b5bc");
-        apiClient.setPassword("HBtKJEMQ*bemSsoUMjXE*g0velRBBQF7o1T6sgE_BR-asctRkL4Vl6e-1EkCZ0DK");
+        apiClient.setUsername("");
+        apiClient.setPassword("");
         apiClient.setDebugging(true);
         return apiClient;
     }
