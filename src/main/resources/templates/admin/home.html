@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Admin Page</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.belvo.io/belvo-widget-1-stable.js" async></script>
+  <script type="text/javascript">
+    function successCallbackFunction(link, institution) {
+      let data = {"user":1,"link":link,"institution":institution};
+      return fetch('/saveId', { method: 'POST', // or 'PUT'
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+              .then(response => response.json())
+              .catch(error => console.error('Error:', error));
+    }
+
+    function onExitCallbackFunction(data) {
+      // Do something with the exit data.
+    }
+
+    function onEventCallbackFunction(data) {
+      // Do something with the event data.
+    }
+
+    // Function to call your server-side to generate the access_token and retrieve the your access token
+    function getAccessToken () {
+       return fetch('/access_token', { method: 'GET' })
+              .then(response => response.json())
+              .then((data) => data.access)
+              .then(openBelvoWidget)
+              .catch(error => console.error('Error:', error));
+    }
+
+    function openBelvoWidget(accessToken) {
+      belvoSDK.createWidget(accessToken, {
+
+        // Add your startup configuration here.
+        callback: (link, institution) => successCallbackFunction(link, institution),
+
+      }).build();
+    }
+
+   //getAccessToken().then(openBelvoWidget) // Once the access token is retrieved, the widget is started.
+  </script>
+</head>
+
+<body>
+<div class="container">
+
+  <form th:action="@{/logout}" method="get">
+    <button class="btn btn-md btn-danger btn-block" name="registration"
+            type="Submit">Logout
+    </button>
+  </form>
+    <button class="btn btn-md btn-danger  btn-block" name="addBankAccount" id="addBankAccount"
+            type="Submit" onclick="getAccessToken ()">Add Bank Account
+    </button>
+  <div id="belvo"></div>
+  <!-- anywhere inside the body -->
+  <div class="panel-group" style="margin-top:40px">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span th:utext="${userName}"></span>
+      </div>
+      <div class="panel-body">
+        <tr th:each="student, iStat : ${clientInstitutions}"
+                th:style="${iStat.odd}? 'font-weight: bold;'"
+                th:alt-title="${iStat.even}? 'even' : 'odd'">
+          <td th:text="${clientInstitutions.name}" />
+        </tr>
+      </div>
+      <p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
