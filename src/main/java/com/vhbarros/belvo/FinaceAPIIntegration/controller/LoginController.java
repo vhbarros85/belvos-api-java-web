@@ -90,9 +90,7 @@ public class LoginController {
 
         List<Link> links = userService.findByUserId(user.getId());
         InstitutionsApi institutionsApi = userService.institutionsApi();
-        System.out.println("AAAAAAAAAAAAAAAAAAAA");
         InstitutionsPaginatedResponse institutionsPaginatedResponse = institutionsApi.listInstitutions(1,100,new InstitutionFilters());
-        System.out.println("BBBBBBBBBBBBBBBBBBB");
         List<Institution> institutions = institutionsPaginatedResponse.getResults();
 
         List<Institution> clientInstitutions = new ArrayList<Institution>();
